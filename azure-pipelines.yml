@@ -7,7 +7,6 @@ trigger:
 - master
 
 variables:
-variables:
 
   # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: '00001111-0000-1111-2222-000011112222'
@@ -100,20 +99,20 @@ stages:
             displayName: 'Use Python version'
 
           - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App : '
+            displayName: 'Deploy Azure Web App : python-cicd-16353'
             inputs:
               azureSubscription: $(azureServiceConnectionId)
               appName: $(webAppName)
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
     - script: |
-      pip install selenium
-      pip install pytest
-      pytest tests/functional_tests/ --webAppUrl=https://$(webAppName).azurewebsites.net --junitxml=$(System.DefaultWorkingDirectory)/TestResults/test-results-functional.xml
-    workingDirectory: $(Pipeline.Workspace)
-    displayName: 'Run functional tests'
+        pip install selenium
+        pip install pytest
+        pytest tests/functional_tests/ --webAppUrl=https://$(webAppName).azurewebsites.net --junitxml=$(System.DefaultWorkingDirectory)/TestResults/test-results-functional.xml
+      workingDirectory: $(Pipeline.Workspace)
+      displayName: 'Run functional tests'
 
     - task: PublishTestResults@2
       inputs:
         searchFolder: $(Pipeline.Workspace)
         testResultsFiles: '**/test-*.xml'
-      displayName: 'Publish test results'    
+      displayName: 'Publish test results'              
